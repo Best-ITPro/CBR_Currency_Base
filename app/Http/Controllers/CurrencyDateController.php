@@ -76,6 +76,8 @@ class CurrencyDateController extends Controller
 
             // Сегодня
             $today = mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
+            // Завтра
+            $yesterday = mktime(0, 0, 0, date("m")  , date("d")+1, date("Y"));
             // Последняя дата в базе
             $lastDayInBase = CurrencyDate::orderBy('id', 'desc')->first()->DateValue;
             // Если наступил другой день
@@ -84,7 +86,7 @@ class CurrencyDateController extends Controller
                 $BeforecheckDay = strtotime($lastDayInBase);
                 $checkDay = strtotime($lastDayInBase) + 3600*24;
                 $title = "Обновление базы курсов валют ЦБ РФ с  <b>" . date('d.m.Y', $checkDay) . "</b> по <b>".date('d.m.Y' ,$today)."</b><br>";
-                while ($today >= $checkDay) {
+                while ($yesterday >= $checkDay) {
                     $result = $result . "Производим поиск курсов валют за " . date('d.m.Y', $checkDay ). "<br>";
                     $currency = simplexml_load_file(Currency::CBR_URL_DAILY . "?date_req=" . date('d/m/Y', $checkDay )) or die ("error cannot create object");
 

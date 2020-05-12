@@ -74,10 +74,12 @@ class Kernel extends ConsoleKernel
             // 2. Currency.Base
             // Сегодня
             $today = mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
+            // Завтра
+            $yesterday = mktime(0, 0, 0, date("m")  , date("d")+1, date("Y"));
             // Последняя дата в базе
             $lastDayInBase = CurrencyDate::orderBy('id', 'desc')->first()->DateValue;
             // Если наступил другой день
-            if($today > strtotime($lastDayInBase)) {
+            if($yesterday > strtotime($lastDayInBase)) {
                 // Сразу проверяем следующий день за последним в базе
                 $BeforecheckDay = strtotime($lastDayInBase);
                 $checkDay = strtotime($lastDayInBase) + 3600*24;
