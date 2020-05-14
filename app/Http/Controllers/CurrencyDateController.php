@@ -16,6 +16,7 @@ class CurrencyDateController extends Controller
         $count = count(CurrencyDate::all());
         $today = date('d/m/Y', time());
         $result = "";
+        $title ='';
 
         // Первоначальное заполнение базы
         if($count == 0) {
@@ -25,10 +26,6 @@ class CurrencyDateController extends Controller
             $DATE_FROM = Currency::DATE_FROM;
             $DATE_TO = strtotime(Currency::DATE_FROM) + 3600*24*$INTERVAL;
             $FINAL_DATE = strtotime($today);
-
-            //echo "DATE_FROM = " . $DATE_FROM . "<br>";
-            //echo "DATE_TO = " . date('d/m/Y', $DATE_TO) ."<br>";
-            //echo "FINAL_DATE = " . $today . "<br>";
 
             $title = "Обновление базы курсов валют ЦБ РФ с  <b>" . Currency::DATE_FROM . "</b> по <b>".$today."</b><br>";
 
@@ -287,9 +284,10 @@ class CurrencyDateController extends Controller
                     'labels' => []
                     ]);
         }
-        $VAL1CurrID = Currency::where('NumCode' , $NumCode)->first()->CurrID;
+
         $currency = Currency::where('NumCode' , $NumCode)->first();
-        $VAL1Value = CurrencyDate::where('CurrID' , $VAL1CurrID)->first()->Value;
+        $currency_date = CurrencyDate::where('CurrID', $currency['CurrID'])->orderBy('id', 'desc')->first();
+        $VAL1Value = $currency_date['Value'];
 
         $currency_date = CurrencyDate::where('CurrID', $currency['CurrID'])->orderBy('id', 'desc')->paginate(Currency::PAGINATE_WEL);
 
@@ -306,9 +304,9 @@ class CurrencyDateController extends Controller
         $chart_title_1 = "Динамика " . $currency -> Name . " с " . $results['labels'][0] . " по " . $results['labels'][$i-1];
 
         $NumCode = Currency::VAl2;
-        $VAL2CurrID = Currency::where('NumCode' , $NumCode)->first()->CurrID;
         $currency = Currency::where('NumCode' , $NumCode)->first();
-        $VAL2Value = CurrencyDate::where('CurrID' , $VAL2CurrID)->first()->Value;
+        $currency_date = CurrencyDate::where('CurrID', $currency['CurrID'])->orderBy('id', 'desc')->first();
+        $VAL2Value = $currency_date['Value'];
 
         $currency_date = CurrencyDate::where('CurrID', $currency['CurrID'])->orderBy('id', 'desc')->paginate(Currency::PAGINATE_WEL);
 
