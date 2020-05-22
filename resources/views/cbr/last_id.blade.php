@@ -9,7 +9,11 @@
         <h2>{!! $title !!}</h2>
 
         <br>
-        <chartcbrline-component></chartcbrline-component>
+        <!-- Вывод графика только на первой странице -->
+        @if( (strripos($_SERVER['REQUEST_URI'], "page") === false ) OR (strripos($_SERVER['REQUEST_URI'], "page=1") !== false ))
+            <chartcbrline-component></chartcbrline-component>
+        @endif
+        <br>
         <br>
 
         <table class="table table-hover">
